@@ -50,12 +50,15 @@ set(BOX2D_INCLUDE_DIR "${AIRFORCE_SOURCE_DIR}/include")
 set(BOX2D_LIB_DIR "${AIRFORCE_SOURCE_DIR}/lib/${PLATFORM_NAME}")
 
 find_package(Threads)
+find_package(X11 REQUIRED)
 find_package(log4cplus REQUIRED)
 find_package(Boost 1.55 COMPONENTS date_time filesystem program_options system thread chrono REQUIRED)
 find_package(Box2D REQUIRED)
 
 add_definitions(${Boost_LIB_DIAGNOSTIC_DEFINITIONS})
 add_definitions(-DBOOST_ALL_NO_LIB)
+
+include_directories(${X11_INCLUDE_DIR})
 
 #fix output directories
 
