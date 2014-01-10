@@ -1,0 +1,80 @@
+cmake_minimum_required(VERSION 2.6)
+cmake_policy(SET CMP0014 NEW)
+
+project(AIRFORCE)
+
+set(CMAKE_MODULE_PATH "${AIRFORCE_SOURCE_DIR}/CMake")
+
+#platform setup
+
+unset(ARCH_NAME CACHE)
+set(ARCH_NAME "i386")
+
+string(TOLOWER "${CMAKE_SYSTEM_NAME}" SYSTEM_NAME)
+
+set(PLATFORM_NAME "${SYSTEM_NAME}_${ARCH_NAME}")
+
+# USER SETTINGS
+
+if (CMAKE_BUILD_TYPE STREQUAL "")
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: None (CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
+endif ()
+
+# END USER SETTINGS
+
+#out dir
+
+set(AIRFORCE_OUT_DIR ${AIRFORCE_BINARY_DIR}/out)
+
+#set includes/libs
+
+set(AIRFORCE_INCLUDE_DIR "${AIRFORCE_SOURCE_DIR}/include")
+include_directories(${AIRFORCE_INCLUDE_DIR})
+
+#find packages
+
+unset(LOG4CPLUS_INCLUDE_DIR CACHE)
+unset(LOG4CPLUS_LIB_DIR CACHE)
+set(LOG4CPLUS_INCLUDE_DIR "${AIRFORCE_SOURCE_DIR}/include")
+set(LOG4CPLUS_LIB_DIR "${AIRFORCE_SOURCE_DIR}/lib/${PLATFORM_NAME}")
+
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_MULTITHREADED ON)
+set(BOOST_INCLUDEDIR "${AIRFORCE_INCLUDE_DIR}")
+set(BOOST_LIBRARYDIR "${AIRFORCE_SOURCE_DIR}/lib/${PLATFORM_NAME}")
+set(Boost_NO_SYSTEM_PATHS ON)
+
+unset(BOX2D_INCLUDE_DIR CACHE)
+unset(BOX2D_LIB_DIR CACHE)
+set(BOX2D_INCLUDE_DIR "${AIRFORCE_SOURCE_DIR}/include")
+set(BOX2D_LIB_DIR "${AIRFORCE_SOURCE_DIR}/lib/${PLATFORM_NAME}")
+
+find_package(Threads)
+find_package(log4cplus REQUIRED)
+find_package(Boost 1.55 COMPONENTS date_time filesystem program_options system thread chrono REQUIRED)
+find_package(Box2D REQUIRED)
+
+add_definitions(${Boost_LIB_DIAGNOSTIC_DEFINITIONS})
+add_definitions(-DBOOST_ALL_NO_LIB)
+
+#fix output directories
+
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${AIRFORCE_OUT_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${AIRFORCE_OUT_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${AIRFORCE_OUT_DIR}/lib)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -D_REENTRANT -fPIC -DPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -D_REENTRANT -fPIC -DPIC")
+foreach (CONFIGURATION RELEASE MINSIZEREL RELWITHDEBINFO)
+    string(REPLACE "-O3" "-O2" CMAKE_C_FLAGS_${CONFIGURATION} "${CMAKE_C_FLAGS_${CONFIGURATION}}")
+    string(REPLACE "-O3" "-O2" CMAKE_CXX_FLAGS_${CONFIGURATION} "${CMAKE_CXX_FLAGS_${CONFIGURATION}}")
+endforeach ()
+
+message(STATUS "Platform - " ${PLATFORM_NAME})
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fvisibility-inlines-hidden")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined -Wl,--exclude-libs,ALL")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-undefined -Wl,--exclude-libs,ALL")
+
+add_subdirectory(game)
