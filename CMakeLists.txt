@@ -29,13 +29,14 @@ set(AIRFORCE_OUT_DIR ${AIRFORCE_BINARY_DIR}/out)
 #set includes/libs
 
 set(AIRFORCE_INCLUDE_DIR "${AIRFORCE_SOURCE_DIR}/include")
+include_directories(${AIRFORCE_INCLUDE_DIR}/${PLATFORM_NAME})
 include_directories(${AIRFORCE_INCLUDE_DIR})
 
 #find packages
 
 unset(LOG4CPLUS_INCLUDE_DIR CACHE)
 unset(LOG4CPLUS_LIB_DIR CACHE)
-set(LOG4CPLUS_INCLUDE_DIR "${AIRFORCE_SOURCE_DIR}/include")
+set(LOG4CPLUS_INCLUDE_DIR "${AIRFORCE_INCLUDE_DIR}")
 set(LOG4CPLUS_LIB_DIR "${AIRFORCE_SOURCE_DIR}/lib/${PLATFORM_NAME}")
 
 set(Boost_USE_STATIC_LIBS ON)
@@ -46,14 +47,20 @@ set(Boost_NO_SYSTEM_PATHS ON)
 
 unset(BOX2D_INCLUDE_DIR CACHE)
 unset(BOX2D_LIB_DIR CACHE)
-set(BOX2D_INCLUDE_DIR "${AIRFORCE_SOURCE_DIR}/include")
+set(BOX2D_INCLUDE_DIR "${AIRFORCE_INCLUDE_DIR}")
 set(BOX2D_LIB_DIR "${AIRFORCE_SOURCE_DIR}/lib/${PLATFORM_NAME}")
+
+unset(LIBPNG_INCLUDE_DIR CACHE)
+unset(LIBPNG_LIB_DIR CACHE)
+set(LIBPNG_INCLUDE_DIR "${AIRFORCE_INCLUDE_DIR}")
+set(LIBPNG_LIB_DIR "${AIRFORCE_SOURCE_DIR}/lib/${PLATFORM_NAME}")
 
 find_package(Threads)
 find_package(X11 REQUIRED)
 find_package(log4cplus REQUIRED)
 find_package(Boost 1.55 COMPONENTS date_time filesystem program_options system thread chrono REQUIRED)
 find_package(Box2D REQUIRED)
+find_package(libpng REQUIRED)
 
 add_definitions(${Boost_LIB_DIAGNOSTIC_DEFINITIONS})
 add_definitions(-DBOOST_ALL_NO_LIB)
@@ -80,4 +87,5 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined -Wl,--exclude-libs,ALL")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-undefined -Wl,--exclude-libs,ALL")
 
+add_subdirectory(afutil)
 add_subdirectory(game)

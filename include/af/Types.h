@@ -13,6 +13,8 @@ namespace af
     typedef signed int SInt32;
     typedef unsigned long long UInt64;
     typedef signed long long SInt64;
+
+    typedef UInt8 Byte;
 }
 
 #endif

@@ -1,6 +1,5 @@
 #include "OGL.h"
 #include "Logger.h"
-#include <stdexcept>
 #include <GL/glx.h>
 #include <dlfcn.h>
 
@@ -63,20 +62,15 @@ namespace af
     static Display* dpy = NULL;
     static GLXContext context = NULL;
 
-    static OGL* currentOGL = NULL;
+    template <>
+    Single<OGL>* Single<OGL>::single = NULL;
 
     OGL::OGL()
     {
-        if (currentOGL) {
-            throw std::runtime_error("OGL already exists");
-        }
-
-        currentOGL = this;
     }
 
     OGL::~OGL()
     {
-        currentOGL = NULL;
     }
 
     bool OGL::init(void* display, void* window)
@@ -112,6 +106,8 @@ namespace af
         GL_GET_PROC(GenTextures, glGenTextures);
         GL_GET_PROC(DeleteTextures, glDeleteTextures);
         GL_GET_PROC(BindTexture, glBindTexture);
+        GL_GET_PROC(TexImage2D, glTexImage2D);
+        GL_GET_PROC(TexParameteri, glTexParameteri);
 
         int n = 0;
 

@@ -25,3 +25,10 @@ boost 1.55.0 compiled by:
 
 ./bjam --with-date_time --with-filesystem --with-program_options --with-system --with-thread --with-chrono --layout=versioned link=static
 ./bjam --with-date_time --with-filesystem --with-program_options --with-system --with-thread --with-chrono --layout=versioned link=static variant=debug
+
+libpng 1.6.8 compiled by:
+
+mkdir -p build
+cd build
+../configure --disable-shared --prefix=${PWD}/../../install
+make install

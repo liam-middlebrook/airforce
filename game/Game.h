@@ -1,13 +1,12 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
+#include "Single.h"
 #include "af/Types.h"
-
-#include <boost/noncopyable.hpp>
 
 namespace af
 {
-    class Game : boost::noncopyable
+    class Game : public Single<Game>
     {
     public:
         Game();
