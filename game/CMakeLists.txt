@@ -9,9 +9,10 @@ set(SOURCES
     Scene.cpp
     SceneObject.cpp
     SceneObjectFactory.cpp
-    Sprite.cpp
     TextureManager.cpp
     Logger.cpp
+    Renderer.cpp
+    Image.cpp
 )
 
 add_executable(airforce ${SOURCES})

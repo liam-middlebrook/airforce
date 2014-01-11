@@ -13,7 +13,8 @@ namespace af
         virtual ~Game();
 
         virtual bool init(void* display, void* window,
-                          UInt32 viewportWidth, UInt32 viewportHeight) = 0;
+                          UInt32 viewWidth, UInt32 viewHeight,
+                          float gameHeight) = 0;
 
         virtual void update() = 0;
 

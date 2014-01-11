@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 
     af::AirForceGame game;
 
-    if (!game.init(dpy, reinterpret_cast<void*>(window), 800, 600)) {
+    if (!game.init(dpy, reinterpret_cast<void*>(window), 800, 600, 100.0f)) {
         return 1;
     }
 
@@ -111,17 +111,20 @@ int main(int argc, char *argv[])
     XEvent event;
 
     while (running) {
-        ::XNextEvent(dpy, &event);
-
-        switch (event.type) {
-        case ClientMessage:
-            if (event.xclient.data.l[0] == static_cast<long>(deleteMessage)) {
-                running = false;
+        while (::XPending(dpy) > 0) {
+            ::XNextEvent(dpy, &event);
+            switch (event.type) {
+            case ClientMessage:
+                if (event.xclient.data.l[0] == static_cast<long>(deleteMessage)) {
+                    running = false;
+                }
+                break;
+            default:
+                break;
             }
-            break;
-        default:
-            break;
         }
+
+        game.update();
     }
 
     game.shutdown();

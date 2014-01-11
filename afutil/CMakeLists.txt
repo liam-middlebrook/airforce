@@ -2,6 +2,7 @@ set(SOURCES
     Logger.cpp
     PNGDecoder.cpp
     PNGUtils.cpp
+    Utils.cpp
 )
 
 add_library(afutil STATIC ${SOURCES})

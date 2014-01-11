@@ -36,15 +36,14 @@ namespace af
     static PFNGLXCHOOSEFBCONFIGPROC chooseFBConfig = NULL;
     static PFNGLXCREATECONTEXTATTRIBSARBPROC createContextAttribsARB = NULL;
     static PFNGLXMAKECURRENTPROC makeCurrent = NULL;
-    static PFNGLXSWAPBUFFERSPROC swapBuffers = NULL;
+    static PFNGLXSWAPBUFFERSPROC swapBuffersFunc = NULL;
     static PFNGLXDESTROYCONTEXTPROC destroyContext = NULL;
 
     static const int ctxAttribs[] =
     {
-        GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+        GLX_CONTEXT_MAJOR_VERSION_ARB, 2,
         GLX_CONTEXT_MINOR_VERSION_ARB, 1,
         GLX_RENDER_TYPE, GLX_RGBA_TYPE,
-        GLX_CONTEXT_PROFILE_MASK_ARB, GLX_CONTEXT_CORE_PROFILE_BIT_ARB,
         None
     };
 
@@ -60,6 +59,7 @@ namespace af
     };
 
     static Display* dpy = NULL;
+    static Window surface = 0;
     static GLXContext context = NULL;
 
     template <>
@@ -78,6 +78,7 @@ namespace af
         LOG4CPLUS_INFO(logger(), "Initializing OpenGL...");
 
         dpy = reinterpret_cast<Display*>(display);
+        surface = reinterpret_cast<Window>(window);
 
         void* handle = ::dlopen("libGL.so.1", RTLD_NOW | RTLD_GLOBAL);
 
@@ -100,7 +101,7 @@ namespace af
         GLX_GET_PROC(chooseFBConfig, glXChooseFBConfig);
         GLX_GET_PROC(createContextAttribsARB, glXCreateContextAttribsARB);
         GLX_GET_PROC(makeCurrent, glXMakeCurrent);
-        GLX_GET_PROC(swapBuffers, glXSwapBuffers);
+        GLX_GET_PROC(swapBuffersFunc, glXSwapBuffers);
         GLX_GET_PROC(destroyContext, glXDestroyContext);
 
         GL_GET_PROC(GenTextures, glGenTextures);
@@ -136,7 +137,7 @@ namespace af
             return false;
         }
 
-        if (!makeCurrent(dpy, reinterpret_cast<GLXDrawable>(window), context)) {
+        if (!makeCurrent(dpy, surface, context)) {
             LOG4CPLUS_ERROR(logger(), "Unable to make context current");
             return false;
         }
@@ -157,5 +158,10 @@ namespace af
         destroyContext(dpy, context);
 
         LOG4CPLUS_INFO(logger(), "OpenGL shut down");
+    }
+
+    void OGL::swapBuffers()
+    {
+        swapBuffersFunc(dpy, surface);
     }
 }

@@ -24,6 +24,8 @@ namespace af
                                       GLint border, GLenum format, GLenum type,
                                       const GLvoid* pixels);
         void (GLAPIENTRY* TexParameteri)(GLenum target, GLenum pname, GLint param);
+
+        void swapBuffers();
     };
 
     extern OGL ogl;

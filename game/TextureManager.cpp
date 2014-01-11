@@ -40,34 +40,36 @@ namespace af
             return it->second;
         }
 
-        PNGDecoder decoder(path_ + name);
-
-        if (!decoder.init())
-        {
-            return TexturePtr();
-        }
-
-        std::vector<Byte> data;
-
-        if (!decoder.decode(data))
-        {
-            return TexturePtr();
-        }
-
         GLuint id;
 
         ogl.GenTextures(1, &id);
         ogl.BindTexture(GL_TEXTURE_2D, id);
-        ogl.TexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
-                       decoder.width(), decoder.height(), 0, GL_RGBA,
-                       GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(&data[0]));
+
+        PNGDecoder decoder(path_ + name);
+
+        std::vector<Byte> data;
+
+        TexturePtr texture;
+
+        if (decoder.init() && decoder.decode(data)) {
+            ogl.TexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
+                           decoder.width(), decoder.height(), 0, GL_RGBA,
+                           GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(&data[0]));
+
+            texture = boost::make_shared<Texture>(id,
+                                                  decoder.width(),
+                                                  decoder.height());
+        } else {
+            ogl.TexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
+                           1, 1, 0, GL_RGBA,
+                           GL_UNSIGNED_BYTE, NULL);
+
+            texture = boost::make_shared<Texture>(id, 1, 1);
+        }
+
         ogl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         ogl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         ogl.BindTexture(GL_TEXTURE_2D, 0);
-
-        TexturePtr texture = boost::make_shared<Texture>(id,
-                                                         decoder.width(),
-                                                         decoder.height());
 
         textures_[name] = texture;
 
