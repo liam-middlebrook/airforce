@@ -29,6 +29,7 @@ namespace af
         }
 
         body()->SetLinearVelocity(b2Mul(body()->GetTransform().q, b2Vec2(moveSpeed_, 0.0f)));
+        body()->SetAngularVelocity(0.0f);
     }
 
     void Player::render()

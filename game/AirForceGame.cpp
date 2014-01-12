@@ -2,6 +2,7 @@
 #include "OGL.h"
 #include "Logger.h"
 #include "Player.h"
+#include "Rock.h"
 #include "TextureManager.h"
 #include "Renderer.h"
 #include "InputManager.h"
@@ -57,6 +58,22 @@ namespace af
         scene_->add(
             new Player(b2Vec2(gameWidth_/2, gameHeight_/2), 10.0f,
                Image(textureManager.loadTexture("common.png"), 0, 0, 64, 64)));
+
+        Image rockImage(textureManager.loadTexture("common.png"), 64, 0, 64, 64);
+
+        {
+            std::vector<b2Vec2> points;
+
+            points.push_back(b2Vec2(-5.0f, -5.0f));
+            points.push_back(b2Vec2(5.0f, -5.0f));
+            points.push_back(b2Vec2(10.0f, 0.0f));
+            points.push_back(b2Vec2(0.0f, 20.0f));
+            points.push_back(b2Vec2(-10.0f, 0.0f));
+
+            scene_->add(new Rock(b2Vec2(30.0f, 30.0f), points, rockImage));
+            scene_->add(new Rock(b2Vec2(40.0f, 70.0f), points, rockImage));
+            scene_->add(new Rock(b2Vec2(80.0f, 40.0f), points, rockImage));
+        }
 
         return true;
     }
