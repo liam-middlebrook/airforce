@@ -21,6 +21,8 @@ namespace af
 
         void update(float dt);
 
+        void render();
+
         inline b2World& world() { return world_; }
 
     private:

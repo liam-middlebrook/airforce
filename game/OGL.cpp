@@ -109,6 +109,36 @@ namespace af
         GL_GET_PROC(BindTexture, glBindTexture);
         GL_GET_PROC(TexImage2D, glTexImage2D);
         GL_GET_PROC(TexParameteri, glTexParameteri);
+        GL_GET_PROC(ClearColor, glClearColor);
+        GL_GET_PROC(Clear, glClear);
+        GL_GET_PROC(Viewport, glViewport);
+        GL_GET_PROC(AttachShader, glAttachShader);
+        GL_GET_PROC(BindAttribLocation, glBindAttribLocation);
+        GL_GET_PROC(CompileShader, glCompileShader);
+        GL_GET_PROC(CreateProgram, glCreateProgram);
+        GL_GET_PROC(CreateShader, glCreateShader);
+        GL_GET_PROC(DeleteProgram, glDeleteProgram);
+        GL_GET_PROC(DeleteShader, glDeleteShader);
+        GL_GET_PROC(DetachShader, glDetachShader);
+        GL_GET_PROC(DisableVertexAttribArray, glDisableVertexAttribArray);
+        GL_GET_PROC(EnableVertexAttribArray, glEnableVertexAttribArray);
+        GL_GET_PROC(LinkProgram, glLinkProgram);
+        GL_GET_PROC(ShaderSource, glShaderSource);
+        GL_GET_PROC(UseProgram, glUseProgram);
+        GL_GET_PROC(GetProgramiv, glGetProgramiv);
+        GL_GET_PROC(GetProgramInfoLog, glGetProgramInfoLog);
+        GL_GET_PROC(GetShaderiv, glGetShaderiv);
+        GL_GET_PROC(GetShaderInfoLog, glGetShaderInfoLog);
+        GL_GET_PROC(GetAttribLocation, glGetAttribLocation);
+        GL_GET_PROC(GetUniformLocation, glGetUniformLocation);
+        GL_GET_PROC(VertexAttribPointer, glVertexAttribPointer);
+        GL_GET_PROC(DrawArrays, glDrawArrays);
+        GL_GET_PROC(Uniform4fv, glUniform4fv);
+        GL_GET_PROC(Enable, glEnable);
+        GL_GET_PROC(Disable, glDisable);
+        GL_GET_PROC(BlendFunc, glBlendFunc);
+        GL_GET_PROC(UniformMatrix4fv, glUniformMatrix4fv);
+        GL_GET_PROC(Uniform1i, glUniform1i);
 
         int n = 0;
 

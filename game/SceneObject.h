@@ -24,6 +24,8 @@ namespace af
          */
         void onAdd(Scene* scene);
 
+        virtual void render() = 0;
+
     private:
         virtual b2Body* init() = 0;
 

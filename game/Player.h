@@ -12,6 +12,8 @@ namespace af
         Player(const b2Vec2& pos, float size, const Image& image);
         ~Player();
 
+        virtual void render();
+
     private:
         virtual b2Body* init();
 

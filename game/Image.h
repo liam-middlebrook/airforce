@@ -13,7 +13,7 @@ namespace af
               UInt32 width, UInt32 height);
         ~Image();
 
-        inline TexturePtr& texture() { return texture_; }
+        inline const TexturePtr& texture() const { return texture_; }
 
         inline const float* rect() const { return rect_; }
 

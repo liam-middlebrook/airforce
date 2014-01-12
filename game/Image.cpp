@@ -12,8 +12,8 @@ namespace af
 
         rect_[0] = xf / texture->width();
         rect_[1] = (xf + width) / texture->width();
-        rect_[2] = yf / texture->height();
-        rect_[3] = (yf + height) / texture->height();
+        rect_[2] = 1.0f - (yf + height) / texture->height();
+        rect_[3] = 1.0f - yf / texture->height();
     }
 
     Image::~Image()

@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "SceneObject.h"
+#include "Renderer.h"
 #include <cmath>
 
 namespace af
@@ -42,5 +43,18 @@ namespace af
         }
 
         world_.ClearForces();
+    }
+
+    void Scene::render()
+    {
+        renderer.clear();
+
+        for (boost::ptr_vector<SceneObject>::iterator it = objects_.begin();
+             it != objects_.end();
+             ++it) {
+            it->render();
+        }
+
+        renderer.swapBuffers();
     }
 }

@@ -3,6 +3,7 @@
 
 #include "Single.h"
 #include "Image.h"
+#include "OGL.h"
 #include <Box2D/Box2D.h>
 
 namespace af
@@ -21,12 +22,31 @@ namespace af
 
         void renderPoint(const b2Vec2& pos, const b2Color& color, float size);
 
-        void renderPolygon(const b2Vec2* vertices,
-                           const b2Vec2* texCoords,
-                           size_t count,
+        void renderPolygon(const GLfloat* vertices,
+                           const GLfloat* texCoords,
+                           GLsizei count,
                            const Image& image);
 
         void swapBuffers();
+
+    private:
+        static GLuint createShader(const std::string& source,
+                                   GLenum type);
+
+        static GLuint createProgram(GLuint vertexShaderId,
+                                    GLuint fragmentShaderId);
+
+        void applyOrtho(GLfloat left, GLfloat right,
+                        GLfloat bottom, GLfloat top,
+                        GLfloat near, GLfloat far);
+
+        GLuint vertexShaderId_;
+        GLuint fragmentShaderId_;
+        GLuint programId_;
+
+        GLint posLocation_;
+        GLint texCoordLocation_;
+        GLint rectLocation_;
     };
 
     extern Renderer renderer;

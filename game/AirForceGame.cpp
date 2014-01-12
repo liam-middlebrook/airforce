@@ -3,6 +3,7 @@
 #include "Logger.h"
 #include "Player.h"
 #include "TextureManager.h"
+#include "Renderer.h"
 #include "af/Utils.h"
 #include <boost/make_shared.hpp>
 
@@ -33,20 +34,24 @@ namespace af
             return false;
         }
 
-        if (!textureManager.init(".")) {
+        if (!textureManager.init("./assets")) {
             return false;
         }
 
         viewWidth_ = viewWidth;
         viewHeight_ = viewHeight;
-        gameWidth_ = gameHeight * (viewWidth / viewHeight);
+        gameWidth_ = gameHeight * (static_cast<float>(viewWidth) / viewHeight);
         gameHeight_ = gameHeight;
+
+        if (!renderer.init(viewWidth, viewHeight, gameWidth_, gameHeight_)) {
+            return false;
+        }
 
         scene_ = boost::make_shared<Scene>();
 
         scene_->add(
-            new Player(b2Vec2(10.0f, 10.0f), 1.0f,
-               Image(textureManager.loadTexture("common.png"), 0, 0, 100, 100)));
+            new Player(b2Vec2(gameWidth_/2, gameHeight_/2), 10.0f,
+               Image(textureManager.loadTexture("common.png"), 0, 0, 64, 64)));
 
         return true;
     }
@@ -70,13 +75,9 @@ namespace af
 
         float dt = static_cast<float>(deltaMs) / 1000.0f;
 
-        /*
-         * Update and render stuff.
-         */
-
         scene_->update(dt);
 
-        ogl.swapBuffers();
+        scene_->render();
 
         UInt64 timeMs2 = getTimeMs();
 
@@ -109,6 +110,8 @@ namespace af
     void AirForceGame::shutdown()
     {
         scene_.reset();
+
+        renderer.shutdown();
 
         textureManager.shutdown();
 
