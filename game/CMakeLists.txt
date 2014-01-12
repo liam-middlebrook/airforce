@@ -8,7 +8,6 @@ set(SOURCES
     Rock.cpp
     Scene.cpp
     SceneObject.cpp
-    SceneObjectFactory.cpp
     TextureManager.cpp
     Logger.cpp
     Renderer.cpp
