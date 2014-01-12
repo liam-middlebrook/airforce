@@ -4,6 +4,7 @@
 #include <log4cplus/configurator.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/XKBlib.h>
 
 static Display* dpy = NULL;
 static Window window = 0;
@@ -110,6 +111,12 @@ int main(int argc, char *argv[])
     bool running = true;
     XEvent event;
 
+    ::XSelectInput(dpy, window, KeyPressMask | KeyReleaseMask);
+
+    ::XkbSetDetectableAutoRepeat(dpy, True, NULL);
+
+    KeySym keysym;
+
     while (running) {
         while (::XPending(dpy) > 0) {
             ::XNextEvent(dpy, &event);
@@ -118,6 +125,14 @@ int main(int argc, char *argv[])
                 if (event.xclient.data.l[0] == static_cast<long>(deleteMessage)) {
                     running = false;
                 }
+                break;
+            case KeyPress:
+                XLookupString(&event.xkey, NULL, 0, &keysym, NULL);
+                game.inputKeyDown(keysym);
+                break;
+            case KeyRelease:
+                XLookupString(&event.xkey, NULL, 0, &keysym, NULL);
+                game.inputKeyUp(keysym);
                 break;
             default:
                 break;

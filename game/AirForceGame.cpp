@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "TextureManager.h"
 #include "Renderer.h"
+#include "InputManager.h"
 #include "af/Utils.h"
 #include <boost/make_shared.hpp>
 
@@ -44,6 +45,10 @@ namespace af
         gameHeight_ = gameHeight;
 
         if (!renderer.init(viewWidth, viewHeight, gameWidth_, gameHeight_)) {
+            return false;
+        }
+
+        if (!inputManager.init()) {
             return false;
         }
 
@@ -101,15 +106,19 @@ namespace af
 
     void AirForceGame::inputKeyDown(int key)
     {
+        inputManager.inputKey(key, true);
     }
 
     void AirForceGame::inputKeyUp(int key)
     {
+        inputManager.inputKey(key, false);
     }
 
     void AirForceGame::shutdown()
     {
         scene_.reset();
+
+        inputManager.shutdown();
 
         renderer.shutdown();
 

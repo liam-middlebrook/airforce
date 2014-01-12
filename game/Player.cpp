@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Renderer.h"
 #include "Logger.h"
+#include "InputManager.h"
 
 namespace af
 {
@@ -17,6 +18,17 @@ namespace af
         if (fixture_) {
             body()->DestroyFixture(fixture_);
         }
+    }
+
+    void Player::update(float dt)
+    {
+        if (inputManager.leftPressed()) {
+            body()->SetTransform(body()->GetPosition(), body()->GetAngle() + rotateSpeed_ * dt);
+        } else if (inputManager.rightPressed()) {
+            body()->SetTransform(body()->GetPosition(), body()->GetAngle() - rotateSpeed_ * dt);
+        }
+
+        body()->SetLinearVelocity(b2Mul(body()->GetTransform().q, b2Vec2(moveSpeed_, 0.0f)));
     }
 
     void Player::render()

@@ -25,6 +25,12 @@ namespace af
 
     void Scene::update(float dt)
     {
+        for (boost::ptr_vector<SceneObject>::iterator it = objects_.begin();
+             it != objects_.end();
+             ++it) {
+            it->update(dt);
+        }
+
         fixedTimestepAccumulator_ += dt;
 
         UInt32 numSteps = std::floor(fixedTimestepAccumulator_ / fixedTimestep_);

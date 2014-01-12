@@ -12,9 +12,14 @@ namespace af
         Player(const b2Vec2& pos, float size, const Image& image);
         ~Player();
 
+        virtual void update(float dt);
+
         virtual void render();
 
     private:
+        static const float moveSpeed_ = 30.0f;
+        static const float rotateSpeed_ = M_PI;
+
         virtual b2Body* init();
 
         b2Vec2 startPos_;
