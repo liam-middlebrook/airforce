@@ -3,6 +3,7 @@
 #include "Renderer.h"
 #include "Logger.h"
 #include "InputManager.h"
+#include <limits>
 
 namespace af
 {
@@ -29,7 +30,6 @@ namespace af
         }
 
         body()->SetLinearVelocity(b2Mul(body()->GetTransform().q, b2Vec2(moveSpeed_, 0.0f)));
-        body()->SetAngularVelocity(0.0f);
     }
 
     void Player::render()
@@ -66,6 +66,7 @@ namespace af
 
         bodyDef.type = b2_dynamicBody;
         bodyDef.position = startPos_;
+        bodyDef.fixedRotation = true;
 
         b2Body* body = scene()->world().CreateBody(&bodyDef);
 

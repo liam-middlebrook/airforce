@@ -31,7 +31,9 @@ namespace af
     Single<Renderer>* Single<Renderer>::single = NULL;
 
     Renderer::Renderer()
-    : vertexShaderId_(0),
+    : gameWidth_(0.0f),
+      gameHeight_(0.0f),
+      vertexShaderId_(0),
       fragmentShaderId_(0),
       programId_(0),
       posLocation_(-1),
@@ -47,6 +49,9 @@ namespace af
     bool Renderer::init(UInt32 viewWidth, UInt32 viewHeight,
                         float gameWidth, float gameHeight)
     {
+        gameWidth_ = gameWidth;
+        gameHeight_ = gameHeight;
+
         ogl.Viewport(0, 0, viewWidth, viewHeight);
         ogl.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -83,13 +88,6 @@ namespace af
         rectLocation_ = ogl.GetUniformLocation(programId_, "rect");
         assert(rectLocation_ >= 0);
 
-        GLint texLocation = ogl.GetUniformLocation(programId_, "tex");
-        assert(texLocation >= 0);
-
-        ogl.Uniform1i(texLocation, 0);
-
-        applyOrtho(0, gameWidth, 0, gameHeight, 0, 1);
-
         return true;
     }
 
@@ -102,6 +100,15 @@ namespace af
         ogl.DeleteShader(vertexShaderId_);
         ogl.DeleteShader(fragmentShaderId_);
         ogl.DeleteProgram(programId_);
+    }
+
+    void Renderer::lookAt(const b2Vec2& pos)
+    {
+        applyOrtho(pos.x - (gameWidth_ / 2),
+                   pos.x + (gameWidth_ / 2),
+                   pos.y - (gameHeight_ / 2),
+                   pos.y + (gameHeight_ / 2),
+                   0.0f, 1.0f);
     }
 
     void Renderer::clear()

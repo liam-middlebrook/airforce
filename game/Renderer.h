@@ -18,6 +18,8 @@ namespace af
                   float gameWidth, float gameHeight);
         void shutdown();
 
+        void lookAt(const b2Vec2& pos);
+
         void clear();
 
         void renderPoint(const b2Vec2& pos, const b2Color& color, float size);
@@ -39,6 +41,9 @@ namespace af
         void applyOrtho(GLfloat left, GLfloat right,
                         GLfloat bottom, GLfloat top,
                         GLfloat near, GLfloat far);
+
+        float gameWidth_;
+        float gameHeight_;
 
         GLuint vertexShaderId_;
         GLuint fragmentShaderId_;

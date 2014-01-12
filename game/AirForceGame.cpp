@@ -8,6 +8,7 @@
 #include "InputManager.h"
 #include "af/Utils.h"
 #include <boost/make_shared.hpp>
+#include <cmath>
 
 namespace af
 {
@@ -16,6 +17,8 @@ namespace af
       viewHeight_(0),
       gameWidth_(0),
       gameHeight_(0),
+      camWidth_(0),
+      camHeight_(0),
       lastTimeMs_(0),
       numFrames_(0),
       accumRenderTimeMs_(0),
@@ -45,6 +48,9 @@ namespace af
         gameWidth_ = gameHeight * (static_cast<float>(viewWidth) / viewHeight);
         gameHeight_ = gameHeight;
 
+        camWidth_= gameWidth_- 15.0f;
+        camHeight_= gameHeight_- 15.0f;
+
         if (!renderer.init(viewWidth, viewHeight, gameWidth_, gameHeight_)) {
             return false;
         }
@@ -53,26 +59,30 @@ namespace af
             return false;
         }
 
+        camPos_ = b2Vec2(0.0f, 0.0f);
+
         scene_ = boost::make_shared<Scene>();
 
-        scene_->add(
-            new Player(b2Vec2(gameWidth_/2, gameHeight_/2), 10.0f,
-               Image(textureManager.loadTexture("common.png"), 0, 0, 64, 64)));
+        player_ =
+            new Player(b2Vec2(0.0f, 30.0f), 10.0f,
+               Image(textureManager.loadTexture("common.png"), 0, 0, 64, 64));
+
+        scene_->add(player_);
 
         Image rockImage(textureManager.loadTexture("common.png"), 64, 0, 64, 64);
 
-        {
-            std::vector<b2Vec2> points;
+        std::vector<b2Vec2> points;
 
-            points.push_back(b2Vec2(-5.0f, -5.0f));
-            points.push_back(b2Vec2(5.0f, -5.0f));
-            points.push_back(b2Vec2(10.0f, 0.0f));
-            points.push_back(b2Vec2(0.0f, 20.0f));
-            points.push_back(b2Vec2(-10.0f, 0.0f));
+        points.push_back(b2Vec2(-5.0f, -5.0f));
+        points.push_back(b2Vec2(5.0f, -5.0f));
+        points.push_back(b2Vec2(10.0f, 0.0f));
+        points.push_back(b2Vec2(0.0f, 20.0f));
+        points.push_back(b2Vec2(-10.0f, 0.0f));
 
-            scene_->add(new Rock(b2Vec2(30.0f, 30.0f), points, rockImage));
-            scene_->add(new Rock(b2Vec2(40.0f, 70.0f), points, rockImage));
-            scene_->add(new Rock(b2Vec2(80.0f, 40.0f), points, rockImage));
+        for (float x = -500.0f; x < 500.0f; x += 50.0f) {
+            for (float y = -500.0f; y < 500.0f; y += 50.0f) {
+                scene_->add(new Rock(b2Vec2(x, y), points, rockImage));
+            }
         }
 
         return true;
@@ -98,6 +108,10 @@ namespace af
         float dt = static_cast<float>(deltaMs) / 1000.0f;
 
         scene_->update(dt);
+
+        updateCam();
+
+        renderer.lookAt(camPos_);
 
         scene_->render();
 
@@ -142,5 +156,20 @@ namespace af
         textureManager.shutdown();
 
         ogl.shutdown();
+    }
+
+    void AirForceGame::updateCam()
+    {
+        b2Vec2 relPos = player_->body()->GetPosition() - camPos_;
+
+        if ((std::fabs(relPos.x) <= (camWidth_ / 2)) &&
+            (std::fabs(relPos.y) <= (camHeight_ / 2))) {
+            playerOldPos_ = player_->body()->GetPosition();
+            return;
+        }
+
+        camPos_ += (player_->body()->GetPosition() - playerOldPos_);
+
+        playerOldPos_ = player_->body()->GetPosition();
     }
 }
