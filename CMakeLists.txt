@@ -22,6 +22,8 @@ endif ()
 
 # END USER SETTINGS
 
+string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE_LOWER)
+
 #out dir
 
 set(AIRFORCE_OUT_DIR ${AIRFORCE_BINARY_DIR}/out)
@@ -55,15 +57,31 @@ unset(LIBPNG_LIB_DIR CACHE)
 set(LIBPNG_INCLUDE_DIR "${AIRFORCE_INCLUDE_DIR}")
 set(LIBPNG_LIB_DIR "${AIRFORCE_SOURCE_DIR}/lib/${PLATFORM_NAME}")
 
+unset(LIBLUA_INCLUDE_DIR CACHE)
+unset(LIBLUA_LIB_DIR CACHE)
+set(LIBLUA_INCLUDE_DIR "${AIRFORCE_INCLUDE_DIR}")
+set(LIBLUA_LIB_DIR "${AIRFORCE_SOURCE_DIR}/lib/${PLATFORM_NAME}")
+
+unset(LIBLUABIND_INCLUDE_DIR CACHE)
+unset(LIBLUABIND_LIB_DIR CACHE)
+set(LIBLUABIND_INCLUDE_DIR "${AIRFORCE_INCLUDE_DIR}")
+set(LIBLUABIND_LIB_DIR "${AIRFORCE_SOURCE_DIR}/lib/${PLATFORM_NAME}")
+
 find_package(Threads)
 find_package(X11 REQUIRED)
 find_package(log4cplus REQUIRED)
 find_package(Boost 1.55 COMPONENTS date_time filesystem program_options system thread chrono REQUIRED)
 find_package(Box2D REQUIRED)
 find_package(libpng REQUIRED)
+find_package(liblua REQUIRED)
+find_package(libluabind REQUIRED)
 
 add_definitions(${Boost_LIB_DIAGNOSTIC_DEFINITIONS})
-add_definitions(-DBOOST_ALL_NO_LIB)
+add_definitions(-DBOOST_ALL_NO_LIB -DLUABIND_CPLUSPLUS_LUA)
+
+if (BUILD_TYPE_LOWER STREQUAL "debug")
+    add_definitions(-DLUA_USE_APICHECK -Dlua_assert=assert)
+endif ()
 
 include_directories(${X11_INCLUDE_DIR})
 

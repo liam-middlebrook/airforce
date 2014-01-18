@@ -32,3 +32,23 @@ mkdir -p build
 cd build
 ../configure --disable-shared --prefix=${PWD}/../../install
 make install
+
+lua 5.1.5 compiled by:
+
+make CC=g++ CFLAGS="-D_REENTRANT -fPIC -DPIC -g -Wall -DLUA_USE_LINUX -DLUA_USE_APICHECK -Dlua_assert=assert" linux
+make install INSTALL_TOP=$PWD/../install
+mv ../install/lib/liblua.a ../install/lib/libluad.a
+
+make clean
+
+make CC=g++ CFLAGS="-D_REENTRANT -fPIC -DPIC -O2 -Wall -DLUA_USE_LINUX -DNDEBUG" linux
+make install INSTALL_TOP=$PWD/../install
+
+luabind 0.9.1 compiled by:
+
+patch -p1 < luabind_boost.patch
+
+export BOOST_ROOT=$PWD/../boost_1_55_0
+export LUA_PATH=$PWD/../install
+bjam --prefix=$PWD/../install -d+2 link=static variant=debug cxxflags="-DBOOST_ALL_NO_LIB -DLUABIND_CPLUSPLUS_LUA -D_REENTRANT -fPIC -DPIC -DLUA_USE_APICHECK -Dlua_assert=assert" install
+bjam --prefix=$PWD/../install -d+2 link=static variant=release cxxflags="-DBOOST_ALL_NO_LIB -DLUABIND_CPLUSPLUS_LUA -D_REENTRANT -fPIC -DPIC" install
