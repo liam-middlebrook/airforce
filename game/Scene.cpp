@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "SceneObject.h"
 #include "Renderer.h"
+#include "Player.h"
 #include <cmath>
 
 namespace af
@@ -14,21 +15,41 @@ namespace af
 
     Scene::~Scene()
     {
+        for (std::vector<SceneObjectPtr>::iterator it = objects_.begin();
+             it != objects_.end();
+             ++it) {
+            (*it)->onRemove();
+        }
     }
 
-    void Scene::add(SceneObject* object)
+    void Scene::add(const SceneObjectPtr& object)
     {
         object->onAdd(this);
 
         objects_.push_back(object);
     }
 
-    void Scene::update(float dt)
+    SceneObjectPtr Scene::findPlayer()
     {
-        for (boost::ptr_vector<SceneObject>::iterator it = objects_.begin();
+        for (std::vector<SceneObjectPtr>::iterator it = objects_.begin();
              it != objects_.end();
              ++it) {
-            it->update(dt);
+            boost::shared_ptr<Player> player = boost::dynamic_pointer_cast<Player>(*it);
+
+            if (player) {
+                return player;
+            }
+        }
+
+        return boost::shared_ptr<Player>();
+    }
+
+    void Scene::update(float dt)
+    {
+        for (std::vector<SceneObjectPtr>::iterator it = objects_.begin();
+             it != objects_.end();
+             ++it) {
+            (*it)->update(dt);
         }
 
         fixedTimestepAccumulator_ += dt;
@@ -55,10 +76,10 @@ namespace af
     {
         renderer.clear();
 
-        for (boost::ptr_vector<SceneObject>::iterator it = objects_.begin();
+        for (std::vector<SceneObjectPtr>::iterator it = objects_.begin();
              it != objects_.end();
              ++it) {
-            it->render();
+            (*it)->render();
         }
 
         renderer.swapBuffers();

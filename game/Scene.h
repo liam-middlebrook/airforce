@@ -2,22 +2,23 @@
 #define _SCENE_H_
 
 #include "af/Types.h"
+#include "SceneObject.h"
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/shared_ptr.hpp>
+#include <vector>
 #include <Box2D/Box2D.h>
 
 namespace af
 {
-    class SceneObject;
-
     class Scene : boost::noncopyable
     {
     public:
         Scene();
         ~Scene();
 
-        void add(SceneObject* object);
+        void add(const SceneObjectPtr& object);
+
+        SceneObjectPtr findPlayer();
 
         void update(float dt);
 
@@ -38,7 +39,7 @@ namespace af
 
         b2World world_;
 
-        boost::ptr_vector<SceneObject> objects_;
+        std::vector<SceneObjectPtr> objects_;
 
         float fixedTimestepAccumulator_;
     };

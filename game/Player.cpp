@@ -16,9 +16,6 @@ namespace af
 
     Player::~Player()
     {
-        if (fixture_) {
-            body()->DestroyFixture(fixture_);
-        }
     }
 
     void Player::update(float dt)
@@ -82,5 +79,10 @@ namespace af
         fixture_ = body->CreateFixture(&fixtureDef);
 
         return body;
+    }
+
+    void Player::destroy()
+    {
+        body()->DestroyFixture(fixture_);
     }
 }

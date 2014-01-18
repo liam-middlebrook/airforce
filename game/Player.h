@@ -22,6 +22,8 @@ namespace af
 
         virtual b2Body* init();
 
+        virtual void destroy();
+
         b2Vec2 startPos_;
         float size_;
 

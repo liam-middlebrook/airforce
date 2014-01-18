@@ -3,11 +3,10 @@
 
 #include "Game.h"
 #include "Scene.h"
+#include "Script.h"
 
 namespace af
 {
-    class Player;
-
     class AirForceGame : public Game
     {
     public:
@@ -39,12 +38,14 @@ namespace af
         float camWidth_;
         float camHeight_;
 
+        ScenePtr scene_;
+
+        ScriptPtr script_;
+
         b2Vec2 camPos_;
 
-        Player* player_;
+        SceneObjectPtr player_;
         b2Vec2 playerOldPos_;
-
-        ScenePtr scene_;
 
         UInt64 lastTimeMs_;
         UInt32 numFrames_;

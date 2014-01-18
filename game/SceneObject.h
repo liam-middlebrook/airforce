@@ -3,6 +3,7 @@
 
 #include "af/Types.h"
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include <Box2D/Box2D.h>
 
 namespace af
@@ -24,6 +25,11 @@ namespace af
          */
         void onAdd(Scene* scene);
 
+        /*
+         * Called when removed from scene.
+         */
+        void onRemove();
+
         virtual void update(float dt) = 0;
 
         virtual void render() = 0;
@@ -31,10 +37,14 @@ namespace af
     private:
         virtual b2Body* init() = 0;
 
+        virtual void destroy() = 0;
+
         Scene* scene_;
 
         b2Body* body_;
     };
+
+    typedef boost::shared_ptr<SceneObject> SceneObjectPtr;
 }
 
 #endif

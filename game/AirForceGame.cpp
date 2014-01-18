@@ -1,11 +1,10 @@
 #include "AirForceGame.h"
 #include "OGL.h"
 #include "Logger.h"
-#include "Player.h"
-#include "Rock.h"
 #include "TextureManager.h"
 #include "Renderer.h"
 #include "InputManager.h"
+#include "SceneObjectFactory.h"
 #include "af/Utils.h"
 #include <boost/make_shared.hpp>
 #include <cmath>
@@ -59,30 +58,32 @@ namespace af
             return false;
         }
 
-        camPos_ = b2Vec2(0.0f, 0.0f);
+        if (!sceneObjectFactory.init()) {
+            return false;
+        }
 
         scene_ = boost::make_shared<Scene>();
 
-        player_ =
-            new Player(b2Vec2(0.0f, 30.0f), 10.0f,
-               Image(textureManager.loadTexture("common.png"), 0, 0, 64, 64));
+        script_ = boost::make_shared<Script>("level.lua",
+                                             "./modules",
+                                             scene_.get());
 
-        scene_->add(player_);
+        if (!script_->init()) {
+            return false;
+        }
 
-        Image rockImage(textureManager.loadTexture("common.png"), 64, 0, 64, 64);
+        if (!script_->run()) {
+            return false;
+        }
 
-        std::vector<b2Vec2> points;
+        camPos_ = b2Vec2(0.0f, 0.0f);
 
-        points.push_back(b2Vec2(-5.0f, -5.0f));
-        points.push_back(b2Vec2(5.0f, -5.0f));
-        points.push_back(b2Vec2(10.0f, 0.0f));
-        points.push_back(b2Vec2(0.0f, 20.0f));
-        points.push_back(b2Vec2(-10.0f, 0.0f));
+        player_ = scene_->findPlayer();
 
-        for (float x = -500.0f; x < 500.0f; x += 50.0f) {
-            for (float y = -500.0f; y < 500.0f; y += 50.0f) {
-                scene_->add(new Rock(b2Vec2(x, y), points, rockImage));
-            }
+        if (!player_) {
+            LOG4CPLUS_ERROR(logger(), "No player");
+
+            return false;
         }
 
         return true;
@@ -147,7 +148,11 @@ namespace af
 
     void AirForceGame::shutdown()
     {
+        script_.reset();
+
         scene_.reset();
+
+        sceneObjectFactory.shutdown();
 
         inputManager.shutdown();
 

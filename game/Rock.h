@@ -22,6 +22,8 @@ namespace af
     private:
         virtual b2Body* init();
 
+        virtual void destroy();
+
         b2Vec2 startPos_;
         std::vector<b2Vec2> points_;
 

@@ -15,9 +15,6 @@ namespace af
 
     Rock::~Rock()
     {
-        if (fixture_) {
-            body()->DestroyFixture(fixture_);
-        }
     }
 
     void Rock::update(float dt)
@@ -80,5 +77,10 @@ namespace af
         fixture_ = body->CreateFixture(&fixtureDef);
 
         return body;
+    }
+
+    void Rock::destroy()
+    {
+        body()->DestroyFixture(fixture_);
     }
 }
