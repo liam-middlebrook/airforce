@@ -20,18 +20,18 @@ namespace af
 
     void Player::update(float dt)
     {
-        if (inputManager.leftPressed()) {
+        /*if (inputManager.leftPressed()) {
             body()->SetTransform(body()->GetPosition(), body()->GetAngle() + rotateSpeed_ * dt);
         } else if (inputManager.rightPressed()) {
             body()->SetTransform(body()->GetPosition(), body()->GetAngle() - rotateSpeed_ * dt);
         }
 
-        body()->SetLinearVelocity(b2Mul(body()->GetTransform().q, b2Vec2(moveSpeed_, 0.0f)));
+        body()->SetLinearVelocity(b2Mul(body()->GetTransform().q, b2Vec2(moveSpeed_, 0.0f)));*/
     }
 
     void Player::render()
     {
-        const b2Transform& xf = body()->GetTransform();
+        /*const b2Transform& xf = body()->GetTransform();
 
         b2Vec2 p1 = b2Mul(xf, b2Vec2(-size_ / 2, size_ / 2));
         b2Vec2 p2 = b2Mul(xf, b2Vec2(-size_ / 2, -size_ / 2));
@@ -54,12 +54,13 @@ namespace af
             0.0f, 1.0f,
         };
 
-        renderer.renderPolygon(&vertices[0], &texCoords[0], 4, image_);
+        renderer.renderPolygon(&vertices[0], &texCoords[0], 4, image_);*/
     }
 
     b2Body* Player::init()
     {
-        b2BodyDef bodyDef;
+        return NULL;
+        /*b2BodyDef bodyDef;
 
         bodyDef.type = b2_dynamicBody;
         bodyDef.position = startPos_;
@@ -78,11 +79,11 @@ namespace af
 
         fixture_ = body->CreateFixture(&fixtureDef);
 
-        return body;
+        return body;*/
     }
 
     void Player::destroy()
     {
-        body()->DestroyFixture(fixture_);
+        //body()->DestroyFixture(fixture_);
     }
 }

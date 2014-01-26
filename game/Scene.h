@@ -1,47 +1,28 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-#include "af/Types.h"
-#include "SceneObject.h"
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-#include <vector>
-#include <Box2D/Box2D.h>
+#include "SceneObjectManager.h"
+#include "Component.h"
 
 namespace af
 {
-    class Scene : boost::noncopyable
+    class Scene : public SceneObjectManager
     {
     public:
         Scene();
         ~Scene();
 
-        void add(const SceneObjectPtr& object);
+        void registerComponent(const ComponentPtr& component);
 
-        SceneObjectPtr findPlayer();
+        void unregisterComponent(const ComponentPtr& component);
 
         void update(float dt);
 
-        void render();
-
-        inline b2World& world() { return world_; }
-
     private:
-        /*
-         * Physics will step with this rate.
-         */
-        static const float fixedTimestep_ = 1.0f / 60.0f;
+        virtual void doUnlock();
 
-        /*
-         * Maximum number of physics steps to avoid "spiral of death".
-         */
-        static const UInt32 maxSteps_ = 5;
-
-        b2World world_;
-
-        std::vector<SceneObjectPtr> objects_;
-
-        float fixedTimestepAccumulator_;
+        class Impl;
+        Impl* impl_;
     };
 
     typedef boost::shared_ptr<Scene> ScenePtr;

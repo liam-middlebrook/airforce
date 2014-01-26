@@ -122,7 +122,7 @@ namespace af
             luabind::module(L_)
             [
                 luabind::class_<Scene>("Scene")
-                    .def("add", &Scene::add),
+                    .def("addObject", &Scene::addObject),
 
                 luabind::class_<SceneObjectFactory>("SceneObjectFactory")
                     .def("createPlayer", &SceneObjectFactory::createPlayer)

@@ -14,6 +14,19 @@ set(SOURCES
     Image.cpp
     SceneObjectFactory.cpp
     Script.cpp
+    SceneObjectManager.cpp
+    ComponentVisitor.cpp
+    PhasedComponentManager.cpp
+    PhysicsBallComponent.cpp
+    PhysicsComponentManager.cpp
+    PhysicsPolygonComponent.cpp
+    PhysicsTerrainComponent.cpp
+    PlayerComponent.cpp
+    RenderComponentManager.cpp
+    RenderImageComponent.cpp
+    RenderPolygonComponent.cpp
+    RenderTerrainComponent.cpp
+    SpriteComponent.cpp
 )
 
 add_executable(airforce ${SOURCES})

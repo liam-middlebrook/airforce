@@ -23,7 +23,7 @@ namespace af
 
     void Rock::render()
     {
-        b2PolygonShape* poly = (b2PolygonShape*)fixture_->GetShape();
+        /*b2PolygonShape* poly = (b2PolygonShape*)fixture_->GetShape();
         const b2Transform& xf = body()->GetTransform();
 
         GLfloat vertices[b2_maxPolygonVertices * 2];
@@ -34,12 +34,13 @@ namespace af
             vertices[i * 2 + 1] = v.y;
         }
 
-        renderer.renderPolygon(&vertices[0], &texCoords_[0], poly->m_count, image_);
+        renderer.renderPolygon(&vertices[0], &texCoords_[0], poly->m_count, image_);*/
     }
 
     b2Body* Rock::init()
     {
-        b2BodyDef bodyDef;
+        return NULL;
+        /*b2BodyDef bodyDef;
 
         bodyDef.type = b2_dynamicBody;
         bodyDef.position = startPos_;
@@ -76,11 +77,11 @@ namespace af
 
         fixture_ = body->CreateFixture(&fixtureDef);
 
-        return body;
+        return body;*/
     }
 
     void Rock::destroy()
     {
-        body()->DestroyFixture(fixture_);
+        //body()->DestroyFixture(fixture_);
     }
 }

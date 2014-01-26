@@ -78,7 +78,7 @@ namespace af
 
         camPos_ = b2Vec2(0.0f, 0.0f);
 
-        player_ = scene_->findPlayer();
+        //player_ = scene_->findPlayer();
 
         if (!player_) {
             LOG4CPLUS_ERROR(logger(), "No player");
@@ -114,7 +114,7 @@ namespace af
 
         renderer.lookAt(camPos_);
 
-        scene_->render();
+        //scene_->render();
 
         UInt64 timeMs2 = getTimeMs();
 
@@ -165,7 +165,7 @@ namespace af
 
     void AirForceGame::updateCam()
     {
-        b2Vec2 relPos = player_->body()->GetPosition() - camPos_;
+        /*b2Vec2 relPos = player_->body()->GetPosition() - camPos_;
 
         if ((std::fabs(relPos.x) <= (camWidth_ / 2)) &&
             (std::fabs(relPos.y) <= (camHeight_ / 2))) {
@@ -175,6 +175,6 @@ namespace af
 
         camPos_ += (player_->body()->GetPosition() - playerOldPos_);
 
-        playerOldPos_ = player_->body()->GetPosition();
+        playerOldPos_ = player_->body()->GetPosition();*/
     }
 }

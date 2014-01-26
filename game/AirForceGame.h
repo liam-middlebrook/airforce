@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Scene.h"
 #include "Script.h"
+#include <Box2D/Box2D.h>
 
 namespace af
 {

@@ -7,81 +7,39 @@
 namespace af
 {
     Scene::Scene()
-    : world_(b2Vec2(0.0f, 0.0f)),
-      fixedTimestepAccumulator_(0.0f)
     {
-        world_.SetAutoClearForces(false);
+        /*
+         * TODO: create ComponentManager list here.
+         */
     }
 
     Scene::~Scene()
     {
-        for (std::vector<SceneObjectPtr>::iterator it = objects_.begin();
-             it != objects_.end();
-             ++it) {
-            (*it)->onRemove();
-        }
+
     }
 
-    void Scene::add(const SceneObjectPtr& object)
+    void Scene::registerComponent(const ComponentPtr& component)
     {
-        object->onAdd(this);
-
-        objects_.push_back(object);
+        /*
+         * TODO: add to apropriate component manager.
+         */
     }
 
-    SceneObjectPtr Scene::findPlayer()
+    void Scene::unregisterComponent(const ComponentPtr& component)
     {
-        for (std::vector<SceneObjectPtr>::iterator it = objects_.begin();
-             it != objects_.end();
-             ++it) {
-            boost::shared_ptr<Player> player = boost::dynamic_pointer_cast<Player>(*it);
-
-            if (player) {
-                return player;
-            }
-        }
-
-        return boost::shared_ptr<Player>();
+        /*
+         * TODO: remove from component manager;
+         */
     }
 
     void Scene::update(float dt)
     {
-        for (std::vector<SceneObjectPtr>::iterator it = objects_.begin();
-             it != objects_.end();
-             ++it) {
-            (*it)->update(dt);
-        }
-
-        fixedTimestepAccumulator_ += dt;
-
-        UInt32 numSteps = std::floor(fixedTimestepAccumulator_ / fixedTimestep_);
-
-        if (numSteps > 0) {
-            fixedTimestepAccumulator_ -= fixedTimestep_ * numSteps;
-        }
-
         /*
-         * static_cast<UInt32> is needed because of some stupid gcc bug.
+         * TODO: lock() , call all componentmanagers, unlock()
          */
-        UInt32 numStepsClamped = (std::min)(numSteps, static_cast<UInt32>(maxSteps_));
-
-        for (UInt32 i = 0; i < numStepsClamped; ++i) {
-            world_.Step(fixedTimestep_, 6, 2);
-        }
-
-        world_.ClearForces();
     }
 
-    void Scene::render()
+    void Scene::doUnlock()
     {
-        renderer.clear();
-
-        for (std::vector<SceneObjectPtr>::iterator it = objects_.begin();
-             it != objects_.end();
-             ++it) {
-            (*it)->render();
-        }
-
-        renderer.swapBuffers();
     }
 }
