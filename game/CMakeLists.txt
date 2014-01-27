@@ -1,11 +1,10 @@
 set(SOURCES
     main.cpp
+    Utils.cpp
     Game.cpp
     AirForceGame.cpp
     OGL.cpp
     InputManager.cpp
-    Player.cpp
-    Rock.cpp
     Scene.cpp
     SceneObject.cpp
     TextureManager.cpp
@@ -17,16 +16,13 @@ set(SOURCES
     SceneObjectManager.cpp
     ComponentVisitor.cpp
     PhasedComponentManager.cpp
-    PhysicsBallComponent.cpp
     PhysicsComponentManager.cpp
-    PhysicsPolygonComponent.cpp
-    PhysicsTerrainComponent.cpp
-    PlayerComponent.cpp
     RenderComponentManager.cpp
-    RenderImageComponent.cpp
+    CameraComponent.cpp
+    PlayerComponent.cpp
+    PhysicsBallComponent.cpp
+    PhysicsPolygonComponent.cpp
     RenderPolygonComponent.cpp
-    RenderTerrainComponent.cpp
-    SpriteComponent.cpp
 )
 
 add_executable(airforce ${SOURCES})

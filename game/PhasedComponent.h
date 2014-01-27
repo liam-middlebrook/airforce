@@ -2,23 +2,23 @@
 #define _PHASEDCOMPONENT_H_
 
 #include "PhasedComponentManager.h"
-#include <list>
 
 namespace af
 {
     enum Phase
     {
-        PhaseThink,
+        PhaseThink = 0,
         /*PhasePhysics,*/ /* Handled by PhysicsComponent */
+        PhasePostPhysics,
         PhasePreRender,
         /*PhaseRender,*/ /* Handled by RenderComponent */
     };
 
+    static const int PhaseMax = PhasePreRender;
+
     class PhasedComponent : public Component
     {
     public:
-        typedef std::list<PhasedComponentPtr>::iterator ManagerCookie;
-
         explicit PhasedComponent(Phase phase)
         : phase_(phase),
           manager_(NULL)
@@ -32,14 +32,7 @@ namespace af
         inline Phase phase() const { return phase_; }
 
         virtual PhasedComponentManager* manager() { return manager_; }
-        inline void setManager(PhasedComponentManager* value,
-                               const ManagerCookie& cookie = ManagerCookie())
-        {
-            manager_ = value;
-            managerCookie_ = cookie;
-        }
-
-        inline ManagerCookie managerCookie() const { return managerCookie_; }
+        inline void setManager(PhasedComponentManager* value) { manager_ = value; }
 
         virtual void update(float dt) = 0;
 
@@ -47,7 +40,6 @@ namespace af
         Phase phase_;
 
         PhasedComponentManager* manager_;
-        ManagerCookie managerCookie_;
     };
 }
 

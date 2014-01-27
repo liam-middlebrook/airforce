@@ -2,7 +2,7 @@
 #define _PHASEDCOMPONENTMANAGER_H_
 
 #include "ComponentManager.h"
-#include <list>
+#include <set>
 
 namespace af
 {
@@ -12,14 +12,14 @@ namespace af
         PhasedComponentManager();
         ~PhasedComponentManager();
 
-        virtual void addComponent(const PhasedComponentPtr& component);
+        virtual void addComponent(const ComponentPtr& component);
 
-        virtual void removeComponent(const PhasedComponentPtr& component);
+        virtual void removeComponent(const ComponentPtr& component);
 
         virtual void update(float dt);
 
     private:
-        std::list<PhasedComponentPtr> components_;
+        std::set<PhasedComponentPtr> components_;
     };
 }
 

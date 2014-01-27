@@ -1,6 +1,6 @@
 local player = factory:createPlayer(vec2(0, 30))
 
-scene:add(player);
+scene:addObject(player);
 
 local rock_points =
 {
@@ -11,9 +11,9 @@ local rock_points =
     vec2(-10, 0)
 };
 
-for x = -500, 500, 50 do
-    for y = -500, 500, 50 do
+for x = -1000, 1000, 30 do
+    for y = -1000, 1000, 30 do
         local rock = factory:createRock(vec2(x, y), rock_points);
-        scene:add(rock);
+        scene:addObject(rock);
     end
 end

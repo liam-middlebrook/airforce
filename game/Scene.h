@@ -9,7 +9,7 @@ namespace af
     class Scene : public SceneObjectManager
     {
     public:
-        Scene();
+        Scene(float cameraWidth, float cameraHeight);
         ~Scene();
 
         void registerComponent(const ComponentPtr& component);
@@ -17,6 +17,8 @@ namespace af
         void unregisterComponent(const ComponentPtr& component);
 
         void update(float dt);
+
+        SceneObjectPtr& camera();
 
     private:
         virtual void doUnlock();

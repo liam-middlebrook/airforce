@@ -13,17 +13,28 @@ namespace af
 
     PhysicsComponentManager::~PhysicsComponentManager()
     {
+        assert(components_.empty());
     }
 
-    void PhysicsComponentManager::addComponent(const PhysicsComponentPtr& component)
+    void PhysicsComponentManager::addComponent(const ComponentPtr& component)
     {
-        component->setManager(this, components_.insert(components_.end(), component));
+        PhysicsComponentPtr physicsComponent = boost::dynamic_pointer_cast<PhysicsComponent>(component);
+        assert(physicsComponent);
+
+        assert(!component->manager());
+
+        components_.insert(physicsComponent);
+        physicsComponent->setManager(this);
     }
 
-    void PhysicsComponentManager::removeComponent(const PhysicsComponentPtr& component)
+    void PhysicsComponentManager::removeComponent(const ComponentPtr& component)
     {
-        components_.erase(component->managerCookie());
-        component->setManager(NULL);
+        PhysicsComponentPtr physicsComponent = boost::dynamic_pointer_cast<PhysicsComponent>(component);
+        assert(physicsComponent);
+
+        if (components_.erase(physicsComponent)) {
+            physicsComponent->setManager(NULL);
+        }
     }
 
     void PhysicsComponentManager::update(float dt)

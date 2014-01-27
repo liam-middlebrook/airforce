@@ -13,11 +13,7 @@ namespace af
 
     SceneObjectManager::~SceneObjectManager()
     {
-        while (!objects_.empty()) {
-            SceneObjectPtr obj = *objects_.begin();
-
-            removeObject(obj);
-        }
+        removeAllObjects();
     }
 
     void SceneObjectManager::addObject(const SceneObjectPtr& obj)
@@ -25,7 +21,10 @@ namespace af
         if (locked_) {
             objectsToAdd_.insert(obj);
         } else {
-            obj->setParent(this, objects_.insert(objects_.end(), obj));
+            assert(!obj->parent());
+
+            objects_.insert(obj);
+            obj->setParent(this);
 
             if (scene()) {
                 registerObject(obj);
@@ -37,21 +36,41 @@ namespace af
     {
         if (locked_) {
             objectsToRemove_.insert(obj);
-        } else {
+        } else if (objects_.erase(obj)) {
             if (scene()) {
                 unregisterObject(obj);
             }
 
-            objects_.erase(obj->parentCookie());
             obj->setParent(NULL);
         }
+    }
+
+    void SceneObjectManager::removeAllObjects()
+    {
+        while (!objects_.empty()) {
+            SceneObjectPtr obj = *objects_.begin();
+
+            removeObject(obj);
+        }
+    }
+
+    SceneObjectPtr SceneObjectManager::findObject(SceneObjectType type)
+    {
+        for (std::set<SceneObjectPtr>::iterator it = objects_.begin();
+             it != objects_.end();
+             ++it ) {
+            if ((*it)->type() == type) {
+                return *it;
+            }
+        }
+        return SceneObjectPtr();
     }
 
     void SceneObjectManager::lock()
     {
         locked_ = true;
 
-        for (std::list<SceneObjectPtr>::iterator it = objects_.begin();
+        for (std::set<SceneObjectPtr>::iterator it = objects_.begin();
              it != objects_.end();
              ++it ) {
             (*it)->lock();
@@ -60,7 +79,7 @@ namespace af
 
     void SceneObjectManager::unlock()
     {
-        for (std::list<SceneObjectPtr>::reverse_iterator it = objects_.rbegin();
+        for (std::set<SceneObjectPtr>::reverse_iterator it = objects_.rbegin();
              it != objects_.rend();
              ++it ) {
             (*it)->unlock();
@@ -90,13 +109,13 @@ namespace af
     {
         obj->setScene(scene());
 
-        for (std::list<SceneObjectPtr>::iterator it = obj->objects_.begin();
+        for (std::set<SceneObjectPtr>::iterator it = obj->objects_.begin();
              it != obj->objects_.end();
              ++it) {
             registerObject(*it);
         }
 
-        for (std::list<ComponentPtr>::iterator it = obj->components().begin();
+        for (std::set<ComponentPtr>::iterator it = obj->components().begin();
              it != obj->components().end();
              ++it) {
             scene()->registerComponent(*it);
@@ -105,13 +124,13 @@ namespace af
 
     void SceneObjectManager::unregisterObject(const SceneObjectPtr& obj)
     {
-        for (std::list<ComponentPtr>::iterator it = obj->components().begin();
+        for (std::set<ComponentPtr>::iterator it = obj->components().begin();
              it != obj->components().end();
              ++it) {
             scene()->unregisterComponent(*it);
         }
 
-        for (std::list<SceneObjectPtr>::iterator it = obj->objects_.begin();
+        for (std::set<SceneObjectPtr>::iterator it = obj->objects_.begin();
              it != obj->objects_.end();
              ++it) {
             unregisterObject(*it);

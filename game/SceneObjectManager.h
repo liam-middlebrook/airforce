@@ -4,7 +4,6 @@
 #include "af/Types.h"
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
-#include <list>
 #include <set>
 
 namespace af
@@ -14,11 +13,15 @@ namespace af
     class SceneObject;
     typedef boost::shared_ptr<SceneObject> SceneObjectPtr;
 
+    enum SceneObjectType
+    {
+        SceneObjectTypeOther = 0,
+        SceneObjectTypePlayer = 1,
+    };
+
     class SceneObjectManager : boost::noncopyable
     {
     public:
-        typedef std::list<SceneObjectPtr>::iterator ParentCookie;
-
         SceneObjectManager();
         virtual ~SceneObjectManager();
 
@@ -26,19 +29,16 @@ namespace af
 
         void removeObject(const SceneObjectPtr& obj);
 
+        void removeAllObjects();
+
+        SceneObjectPtr findObject(SceneObjectType type);
+
         void lock();
 
         void unlock();
 
         inline SceneObjectManager* parent() { return parent_; }
-        inline void setParent(SceneObjectManager* value,
-                              const ParentCookie& cookie = ParentCookie())
-        {
-            parent_ = value;
-            parentCookie_ = cookie;
-        }
-
-        inline ParentCookie parentCookie() { return parentCookie_; }
+        inline void setParent(SceneObjectManager* value) { parent_ = value; }
 
         inline Scene* scene() { return scene_; }
         inline void setScene(Scene* value) { scene_ = value; }
@@ -53,13 +53,12 @@ namespace af
         void unregisterObject(const SceneObjectPtr& obj);
 
         SceneObjectManager* parent_;
-        ParentCookie parentCookie_;
 
         Scene* scene_;
 
         bool locked_;
 
-        std::list<SceneObjectPtr> objects_;
+        std::set<SceneObjectPtr> objects_;
 
         std::set<SceneObjectPtr> objectsToAdd_;
         std::set<SceneObjectPtr> objectsToRemove_;

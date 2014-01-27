@@ -2,7 +2,6 @@
 #define _RENDERCOMPONENT_H_
 
 #include "RenderComponentManager.h"
-#include <list>
 #include <vector>
 
 namespace af
@@ -10,8 +9,6 @@ namespace af
     class RenderComponent : public Component
     {
     public:
-        typedef std::list<RenderComponentPtr>::iterator ManagerCookie;
-
         explicit RenderComponent(int zOrder = 0)
         : manager_(NULL),
           zOrder_(zOrder)
@@ -21,14 +18,18 @@ namespace af
         virtual ~RenderComponent() {}
 
         virtual RenderComponentManager* manager() { return manager_; }
-        inline void setManager(RenderComponentManager* value,
-                               const ManagerCookie& cookie = ManagerCookie())
+        inline void setManager(RenderComponentManager* value)
         {
-            manager_ = value;
-            managerCookie_ = cookie;
+            if (!manager_ && value) {
+                manager_ = value;
+                onRegister();
+            } else if (manager_ && !value) {
+                onUnregister();
+                manager_ = NULL;
+            } else {
+                assert(false);
+            }
         }
-
-        inline ManagerCookie managerCookie() const { return managerCookie_; }
 
         inline int zOrder() const { return zOrder_; }
         inline void setZOrder(int value) { zOrder_ = value; }
@@ -38,8 +39,11 @@ namespace af
         virtual void render(float dt, const std::vector<void*>& parts) = 0;
 
     private:
+        virtual void onRegister() = 0;
+
+        virtual void onUnregister() = 0;
+
         RenderComponentManager* manager_;
-        ManagerCookie managerCookie_;
 
         int zOrder_;
     };

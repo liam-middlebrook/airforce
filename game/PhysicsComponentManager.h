@@ -3,7 +3,7 @@
 
 #include "ComponentManager.h"
 #include <Box2D/Box2D.h>
-#include <list>
+#include <set>
 
 namespace af
 {
@@ -13,9 +13,9 @@ namespace af
         PhysicsComponentManager();
         ~PhysicsComponentManager();
 
-        virtual void addComponent(const PhysicsComponentPtr& component);
+        virtual void addComponent(const ComponentPtr& component);
 
-        virtual void removeComponent(const PhysicsComponentPtr& component);
+        virtual void removeComponent(const ComponentPtr& component);
 
         virtual void update(float dt);
 
@@ -36,7 +36,7 @@ namespace af
 
         float fixedTimestepAccumulator_;
 
-        std::list<PhysicsComponentPtr> components_;
+        std::set<PhysicsComponentPtr> components_;
     };
 }
 

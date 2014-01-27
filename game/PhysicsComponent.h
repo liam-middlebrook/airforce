@@ -8,43 +8,33 @@ namespace af
     class PhysicsComponent : public Component
     {
     public:
-        typedef std::list<PhysicsComponentPtr>::iterator ManagerCookie;
-
         PhysicsComponent()
         : manager_(NULL)
         {
         }
 
-        virtual ~PhysicsComponent()
-        {
-        }
+        virtual ~PhysicsComponent() {}
 
         virtual PhysicsComponentManager* manager() { return manager_; }
-        inline void setManager(PhysicsComponentManager* value,
-                               const ManagerCookie& cookie = ManagerCookie())
+        inline void setManager(PhysicsComponentManager* value)
         {
             if (!manager_ && value) {
                 manager_ = value;
-                managerCookie_ = cookie;
-                onAdd();
+                onRegister();
             } else if (manager_ && !value) {
+                onUnregister();
                 manager_ = NULL;
-                managerCookie_ = ManagerCookie();
-                onRemove();
             } else {
                 assert(false);
             }
         }
 
-        inline ManagerCookie managerCookie() const { return managerCookie_; }
-
     private:
-        virtual void onAdd() = 0;
+        virtual void onRegister() = 0;
 
-        virtual void onRemove() = 0;
+        virtual void onUnregister() = 0;
 
         PhysicsComponentManager* manager_;
-        ManagerCookie managerCookie_;
     };
 }
 
