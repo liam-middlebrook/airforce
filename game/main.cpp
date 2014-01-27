@@ -1,6 +1,6 @@
 #include "Logger.h"
 #include "AirForceGame.h"
-#include "af/Types.h"
+#include "Types.h"
 #include <log4cplus/configurator.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>

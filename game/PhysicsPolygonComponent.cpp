@@ -3,7 +3,7 @@
 
 namespace af
 {
-    PhysicsPolygonComponent::PhysicsPolygonComponent(const std::vector<b2Vec2>& points)
+    PhysicsPolygonComponent::PhysicsPolygonComponent(const Points& points)
     : points_(points),
       body_(NULL),
       fixture_(NULL)
@@ -34,7 +34,7 @@ namespace af
         b2FixtureDef fixtureDef;
 
         fixtureDef.shape = &shape;
-        fixtureDef.density = 100.0f;
+        fixtureDef.density = 10.0f;
 
         fixture_ = body_->CreateFixture(&fixtureDef);
 

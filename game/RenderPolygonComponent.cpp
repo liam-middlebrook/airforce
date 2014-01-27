@@ -5,9 +5,9 @@
 
 namespace af
 {
-    std::vector<b2Vec2> RenderPolygonComponent::tmp_;
+    Points RenderPolygonComponent::tmp_;
 
-    RenderPolygonComponent::RenderPolygonComponent(const std::vector<b2Vec2>& points,
+    RenderPolygonComponent::RenderPolygonComponent(const Points& points,
                                                    const Image& image,
                                                    int zOrder)
     : RenderComponent(zOrder),
@@ -69,7 +69,8 @@ namespace af
 
     void RenderPolygonComponent::render(float dt, const std::vector<void*>& parts)
     {
-        renderer.renderPolygon(&vertices_[0], &texCoords_[0], points_.size(), image_);
+        renderer.renderPolygon(GL_TRIANGLE_FAN, &vertices_[0], &texCoords_[0],
+                               points_.size(), image_);
     }
 
     void RenderPolygonComponent::onRegister()

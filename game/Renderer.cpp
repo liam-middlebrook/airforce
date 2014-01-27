@@ -20,8 +20,8 @@ namespace af
         "varying vec2 v_texCoord;\n"
         "void main()\n"
         "{\n"
-        "    float u = mix(rect[0], rect[1], v_texCoord.x);\n"
-        "    float v = mix(rect[2], rect[3], v_texCoord.y);\n"
+        "    float u = mix(rect[0], rect[1], fract(v_texCoord.x));\n"
+        "    float v = mix(rect[2], rect[3], fract(v_texCoord.y));\n"
         "    gl_FragColor = texture2D(tex, vec2(u, v));\n"
         "}\n";
 
@@ -120,7 +120,8 @@ namespace af
     {
     }
 
-    void Renderer::renderPolygon(const GLfloat* vertices,
+    void Renderer::renderPolygon(GLenum mode,
+                                 const GLfloat* vertices,
                                  const GLfloat* texCoords,
                                  GLsizei count,
                                  const Image& image)
@@ -134,7 +135,7 @@ namespace af
         ogl.EnableVertexAttribArray(posLocation_);
         ogl.EnableVertexAttribArray(texCoordLocation_);
 
-        ogl.DrawArrays(GL_TRIANGLE_FAN, 0, count);
+        ogl.DrawArrays(mode, 0, count);
 
         ogl.DisableVertexAttribArray(posLocation_);
         ogl.DisableVertexAttribArray(texCoordLocation_);

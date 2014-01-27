@@ -1,5 +1,5 @@
-#ifndef _PHYSICSPOLYGONCOMPONENT_H_
-#define _PHYSICSPOLYGONCOMPONENT_H_
+#ifndef _PHYSICSTERRAINCOMPONENT_H_
+#define _PHYSICSTERRAINCOMPONENT_H_
 
 #include "PhysicsComponent.h"
 #include <boost/enable_shared_from_this.hpp>
@@ -7,12 +7,12 @@
 
 namespace af
 {
-    class PhysicsPolygonComponent : public boost::enable_shared_from_this<PhysicsPolygonComponent>,
+    class PhysicsTerrainComponent : public boost::enable_shared_from_this<PhysicsTerrainComponent>,
                                     public PhysicsComponent
     {
     public:
-        PhysicsPolygonComponent(const Points& points);
-        ~PhysicsPolygonComponent();
+        PhysicsTerrainComponent(const std::vector<Points>& chains);
+        ~PhysicsTerrainComponent();
 
         virtual void accept(ComponentVisitor& visitor);
 
@@ -21,10 +21,10 @@ namespace af
 
         virtual void onUnregister();
 
-        Points points_;
+        std::vector<Points> chains_;
 
         b2Body* body_;
-        b2Fixture* fixture_;
+        std::vector<b2Fixture*> fixtures_;
     };
 }
 

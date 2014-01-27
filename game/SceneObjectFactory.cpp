@@ -3,7 +3,9 @@
 #include "PlayerComponent.h"
 #include "PhysicsBallComponent.h"
 #include "PhysicsPolygonComponent.h"
+#include "PhysicsTerrainComponent.h"
 #include "RenderPolygonComponent.h"
+#include "RenderTerrainComponent.h"
 #include <boost/make_shared.hpp>
 
 namespace af
@@ -53,7 +55,7 @@ namespace af
         }
 
         {
-            std::vector<b2Vec2> points;
+            Points points;
 
             points.push_back(b2Vec2(-size / 2, size / 2));
             points.push_back(b2Vec2(-size / 2, -size / 2));
@@ -71,7 +73,7 @@ namespace af
     }
 
     SceneObjectPtr SceneObjectFactory::createRock(const b2Vec2& pos,
-                                                  const std::vector<b2Vec2>& points)
+                                                  const Points& points)
     {
         SceneObjectPtr obj =
             boost::make_shared<SceneObject>(SceneObjectTypeOther, pos);
@@ -90,6 +92,35 @@ namespace af
             ComponentPtr component =
                 boost::make_shared<RenderPolygonComponent>(points,
                     Image(textureManager.loadTexture("common.png"), 64, 0, 64, 64));
+
+            obj->addComponent(component);
+        }
+
+        return obj;
+    }
+
+    SceneObjectPtr SceneObjectFactory::createTerrain(const b2Vec2& pos,
+                                                     const Points& points,
+                                                     const std::vector<Points>& holes)
+    {
+        SceneObjectPtr obj =
+            boost::make_shared<SceneObject>(SceneObjectTypeOther, pos);
+
+        {
+            std::vector<Points> chains = holes;
+            chains.push_back(points);
+
+            ComponentPtr component =
+                boost::make_shared<PhysicsTerrainComponent>(chains);
+
+            obj->addComponent(component);
+        }
+
+        {
+            ComponentPtr component =
+                boost::make_shared<RenderTerrainComponent>(points, holes,
+                    Image(textureManager.loadTexture("common.png"), 64, 0, 64, 64),
+                    10.0f, 10.0f);
 
             obj->addComponent(component);
         }

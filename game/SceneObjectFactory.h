@@ -3,7 +3,7 @@
 
 #include "Single.h"
 #include "SceneObject.h"
-#include "af/Types.h"
+#include "Types.h"
 #include <Box2D/Box2D.h>
 #include <vector>
 
@@ -21,8 +21,11 @@ namespace af
 
         SceneObjectPtr createPlayer(const b2Vec2& pos);
 
-        SceneObjectPtr createRock(const b2Vec2& pos,
-                                  const std::vector<b2Vec2>& points);
+        SceneObjectPtr createRock(const b2Vec2& pos, const Points& points);
+
+        SceneObjectPtr createTerrain(const b2Vec2& pos,
+                                     const Points& points,
+                                     const std::vector<Points>& holes);
     };
 
     extern SceneObjectFactory sceneObjectFactory;

@@ -1,7 +1,7 @@
 #ifndef _SCENEOBJECTMANAGER_H_
 #define _SCENEOBJECTMANAGER_H_
 
-#include "af/Types.h"
+#include "Types.h"
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <set>

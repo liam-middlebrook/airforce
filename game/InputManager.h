@@ -2,7 +2,7 @@
 #define _INPUTMANAGER_H_
 
 #include "Single.h"
-#include "af/Types.h"
+#include "Types.h"
 
 namespace af
 {

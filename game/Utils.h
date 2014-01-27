@@ -1,7 +1,7 @@
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
-#include "af/Types.h"
+#include "Types.h"
 #include <Box2D/Box2D.h>
 
 namespace af

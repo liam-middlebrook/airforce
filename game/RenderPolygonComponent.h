@@ -12,12 +12,11 @@ namespace af
      * Renders simple convex polygon. 'image' is stretched upon
      * entire polygon.
      */
-
     class RenderPolygonComponent : public boost::enable_shared_from_this<RenderPolygonComponent>,
                                    public RenderComponent
     {
     public:
-        RenderPolygonComponent(const std::vector<b2Vec2>& points,
+        RenderPolygonComponent(const Points& points,
                                const Image& image,
                                int zOrder = 0);
         ~RenderPolygonComponent();
@@ -33,11 +32,11 @@ namespace af
 
         virtual void onUnregister();
 
-        static std::vector<b2Vec2> tmp_;
+        static Points tmp_;
 
         b2AABB updateVertices();
 
-        std::vector<b2Vec2> points_;
+        Points points_;
         Image image_;
 
         std::vector<float> vertices_;

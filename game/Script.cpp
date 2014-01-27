@@ -36,16 +36,16 @@ namespace luabind
     {};
 
     template <>
-    struct default_converter< std::vector<b2Vec2> > : native_converter_base< std::vector<b2Vec2> >
+    struct default_converter<af::Points> : native_converter_base<af::Points>
     {
         static int compute_score(lua_State* L, int index)
         {
             return ::lua_type(L, index) == LUA_TTABLE ? 0 : -1;
         }
 
-        std::vector<b2Vec2> from(lua_State* L, int index)
+        af::Points from(lua_State* L, int index)
         {
-            std::vector<b2Vec2> list;
+            af::Points list;
 
             for (luabind::iterator it(luabind::object(luabind::from_stack(L, index))), end;
                  it != end; ++it) {
@@ -56,14 +56,51 @@ namespace luabind
             return list;
         }
 
-        void to(lua_State* L, const std::vector<b2Vec2>& value)
+        void to(lua_State* L, const af::Points& value)
         {
             throw luabind::cast_failed(L, typeid(value));
         }
     };
 
     template <>
-    struct default_converter<const std::vector<b2Vec2>&> : default_converter< std::vector<b2Vec2> >
+    struct default_converter<const af::Points&> : default_converter<af::Points>
+    {};
+
+    template <>
+    struct default_converter< std::vector<af::Points> > : native_converter_base< std::vector<af::Points> >
+    {
+        static int compute_score(lua_State* L, int index)
+        {
+            return ::lua_type(L, index) == LUA_TTABLE ? 0 : -1;
+        }
+
+        std::vector<af::Points> from(lua_State* L, int index)
+        {
+            std::vector<af::Points> lists;
+
+            for (luabind::iterator it(luabind::object(luabind::from_stack(L, index))), end;
+                 it != end; ++it) {
+                lists.push_back(af::Points());
+
+                af::Points& list = lists.back();
+
+                for (luabind::iterator jt(*it), end2; jt != end2; ++jt) {
+                    list.push_back(b2Vec2(luabind::object_cast<float>((*jt)["x"]),
+                                          luabind::object_cast<float>((*jt)["y"])));
+                }
+            }
+
+            return lists;
+        }
+
+        void to(lua_State* L, const af::Points& value)
+        {
+            throw luabind::cast_failed(L, typeid(value));
+        }
+    };
+
+    template <>
+    struct default_converter< const std::vector<af::Points>& > : default_converter< std::vector<af::Points> >
     {};
 }
 
@@ -126,7 +163,8 @@ namespace af
 
                 luabind::class_<SceneObjectFactory>("SceneObjectFactory")
                     .def("createPlayer", &SceneObjectFactory::createPlayer)
-                    .def("createRock", &SceneObjectFactory::createRock),
+                    .def("createRock", &SceneObjectFactory::createRock)
+                    .def("createTerrain", &SceneObjectFactory::createTerrain),
 
                 luabind::class_< SceneObject, boost::shared_ptr<SceneObject> >("SceneObject")
                     .def("scene", &SceneObject::scene)

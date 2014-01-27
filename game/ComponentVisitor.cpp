@@ -5,8 +5,10 @@
 #include "PhysicsComponent.h"
 #include "PhysicsBallComponent.h"
 #include "PhysicsPolygonComponent.h"
+#include "PhysicsTerrainComponent.h"
 #include "RenderComponent.h"
 #include "RenderPolygonComponent.h"
+#include "RenderTerrainComponent.h"
 
 namespace af
 {
@@ -38,7 +40,17 @@ namespace af
         visitPhysicsComponent(component);
     }
 
+    void ComponentVisitor::visitPhysicsTerrainComponent(const PhysicsTerrainComponentPtr& component)
+    {
+        visitPhysicsComponent(component);
+    }
+
     void ComponentVisitor::visitRenderPolygonComponent(const RenderPolygonComponentPtr& component)
+    {
+        visitRenderComponent(component);
+    }
+
+    void ComponentVisitor::visitRenderTerrainComponent(const RenderTerrainComponentPtr& component)
     {
         visitRenderComponent(component);
     }

@@ -1,7 +1,7 @@
 #ifndef _TEXTURE_H_
 #define _TEXTURE_H_
 
-#include "af/Types.h"
+#include "Types.h"
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 

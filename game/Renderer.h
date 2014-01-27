@@ -24,7 +24,8 @@ namespace af
 
         void renderPoint(const b2Vec2& pos, const b2Color& color, float size);
 
-        void renderPolygon(const GLfloat* vertices,
+        void renderPolygon(GLenum mode,
+                           const GLfloat* vertices,
                            const GLfloat* texCoords,
                            GLsizei count,
                            const Image& image);
