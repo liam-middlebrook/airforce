@@ -6,23 +6,21 @@ namespace af
     static const std::string vertexShaderSource =
         "attribute vec4 pos;\n"
         "uniform mat4 proj;\n"
+        "uniform vec4 rect;\n"
         "attribute vec2 texCoord;\n"
         "varying vec2 v_texCoord;\n"
         "void main()\n"
         "{\n"
-        "    v_texCoord = texCoord;\n"
+        "    v_texCoord = vec2(mix(rect[0], rect[1], fract(texCoord.x)), mix(rect[2], rect[3], fract(texCoord.y)));\n"
         "    gl_Position = proj * pos;\n"
         "}\n";
 
     static const std::string fragmentShaderSource =
         "uniform sampler2D tex;\n"
-        "uniform vec4 rect;\n"
         "varying vec2 v_texCoord;\n"
         "void main()\n"
         "{\n"
-        "    float u = mix(rect[0], rect[1], fract(v_texCoord.x));\n"
-        "    float v = mix(rect[2], rect[3], fract(v_texCoord.y));\n"
-        "    gl_FragColor = texture2D(tex, vec2(u, v));\n"
+        "    gl_FragColor = texture2D(tex, v_texCoord);\n"
         "}\n";
 
     Renderer renderer;
